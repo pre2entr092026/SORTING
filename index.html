@@ -122,12 +122,12 @@ var BINS = {
   W:{cls:"wet", en:"Wet", hi:"गीला कचरा", ce:"Green bin", ch:"हरा डिब्बा", ee:"Food, peels, flowers", eh:"खाना, छिलके, फूल"},
   D:{cls:"dry", en:"Dry", hi:"सूखा कचरा", ce:"Blue bin", ch:"नीला डिब्बा", ee:"Paper, plastic, metal, glass, cloth, wood, rubber", eh:"कागज़, प्लास्टिक, धातु, काँच, कपड़ा, लकड़ी, रबर"},
   S:{cls:"san", en:"Sanitary", hi:"सैनिटरी कचरा", ce:"Red bin", ch:"लाल डिब्बा", ee:"Diapers, sanitary pads", eh:"डायपर, सैनिटरी पैड"},
-  T:{cls:"thk", en:"Thinking bin", hi:"सोचने वाला डिब्बा", ce:"Pause and think", ch:"रुकें और सोचें", ee:"Pause first: reuse it, repair it or check it (Everyone mode)", eh:"पहले रुकें: दोबारा इस्तेमाल करें, ठीक कराएँ या जाँचें (सबके लिए मोड)"},
+  T:{cls:"thk", en:"Thinking bin", hi:"सोचने वाला डिब्बा", ce:"Pause and think", ch:"रुकें और सोचें", ee:"Pause first: reuse it, repair it or check it", eh:"पहले रुकें: दोबारा इस्तेमाल करें, ठीक कराएँ या जाँचें"},
   H:{cls:"spc", en:"Special care", hi:"विशेष देखभाल कचरा", ce:"Black bin", ch:"काला डिब्बा", ee:"Batteries, tube lights, medicines, paint, e-waste", eh:"बैटरी, ट्यूबलाइट, दवाइयाँ, पेंट, ई-कचरा"}
 };
 var KEYS = ["W","D","S","H"];
 var ALLKEYS = ["W","D","S","H","T"];
-function activeKeys(){return mode==="kids" ? KEYS : ALLKEYS}
+function activeKeys(){return ALLKEYS}
 
 /* [emoji, bin, name EN, name HI, why EN, why HI, level(1=easy,2=tricky)] */
 var ITEMS = [
@@ -184,25 +184,25 @@ var TIPS = [
 var T = {
  en:{
   title:"Sorting Challenge",
-  sub:"Sort each item into the right bin, fast. Every wrong answer adds 5 seconds to your final time.",
-  kids:"Kids mode", kidsD:"12 easy items", all:"Everyone mode", allD:"20 items, some tricky",
+  sub:"Sort 10 random items into the right bin, fast. Every wrong answer adds 5 seconds to your final time.",
+  play:"Start game", playD:"10 random items, new every time",
   name:"Your name (optional)", legend:"The bins",
   hint:"Drag the item to a bin, or tap a bin. Keys 1 to {n} also work.",
   next:"Next item", finish:"See my time", ok:"Correct!", no:"Not quite. This goes in the {b}.",
   time:"Your time", pen:"Includes {n} × 5 s for wrong answers.", nopen:"No penalties. Perfect sorting!",
-  correct:"correct", again:"Play again", home:"Change mode", share:"Share result", copied:"Copied to clipboard",
+  correct:"correct", again:"Play again", home:"Back to start", share:"Share result", copied:"Copied to clipboard",
   missed:"Items to remember", best:"Best times", none:"No times yet. Be the first!", tip:"A smaller footprint step",
   r1:"Bin Champion", r2:"Sorting Star", r3:"Good Stepper", r4:"Keep practising", of:"of", sec:"s", anon:"Player"
  },
  hi:{
   title:"छँटाई चैलेंज",
-  sub:"हर चीज़ को जल्दी से सही डिब्बे में डालें। हर गलत जवाब पर आपके अंतिम समय में 5 सेकंड जुड़ते हैं।",
-  kids:"बच्चों के लिए", kidsD:"12 आसान चीज़ें", all:"सबके लिए", allD:"20 चीज़ें, कुछ मुश्किल",
+  sub:"हर बार 10 नई, बेतरतीब चीज़ें जल्दी से सही डिब्बे में डालें। हर गलत जवाब पर आपके अंतिम समय में 5 सेकंड जुड़ते हैं।",
+  play:"खेल शुरू करें", playD:"10 बेतरतीब चीज़ें, हर बार नई",
   name:"आपका नाम (वैकल्पिक)", legend:"डिब्बे",
   hint:"चीज़ को डिब्बे तक खींचें या डिब्बे पर टैप करें। कीबोर्ड पर 1 से {n} तक की कुंजियाँ भी चलती हैं।",
   next:"अगली चीज़", finish:"मेरा समय देखें", ok:"सही!", no:"थोड़ा चूक गए। यह {b} में जाता है।",
   time:"आपका समय", pen:"गलत जवाबों के {n} × 5 सेकंड शामिल हैं।", nopen:"कोई जुर्माना नहीं। बिल्कुल सही छँटाई!",
-  correct:"सही", again:"फिर खेलें", home:"मोड बदलें", share:"नतीजा शेयर करें", copied:"क्लिपबोर्ड पर कॉपी हो गया",
+  correct:"सही", again:"फिर खेलें", home:"शुरुआत पर वापस", share:"नतीजा शेयर करें", copied:"क्लिपबोर्ड पर कॉपी हो गया",
   missed:"याद रखने लायक चीज़ें", best:"सबसे अच्छे समय", none:"अभी कोई समय नहीं। पहले आप बनें!", tip:"छोटे कार्बन फुटप्रिंट की ओर एक कदम",
   r1:"डिब्बा चैंपियन", r2:"छँटाई का सितारा", r3:"अच्छा कदम", r4:"अभ्यास जारी रखें", of:"में से", sec:"से.", anon:"खिलाड़ी"
  }
@@ -213,7 +213,7 @@ function icon(it){var e=it[0];return e.charAt(0)==="@"?ICONS[e.slice(1)]:e}
 
 /* ---------- state ---------- */
 var lang = (navigator.language||"").toLowerCase().indexOf("hi")===0 ? "hi" : "en";
-var view = "start", mode = "kids", player = "";
+var view = "start", player = "";
 var round = [], idx = 0, wrong = 0, elapsed = 0, startT = null, missed = [], phase = "ask", lastRes = null;
 var $ = function(s){return document.querySelector(s)};
 function t(k){return T[lang][k]}
@@ -222,24 +222,21 @@ function L(en,hi){return lang==="hi"?hi:en}
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=a[i];a[i]=a[j];a[j]=x}return a}
 function fmt(s){return s.toFixed(1)+" "+t("sec")}
 
-function buildRound(m){
-  var pool = m==="kids" ? ITEMS.filter(function(i){return i[6]===1}) : ITEMS.slice();
-  var n = m==="kids" ? 12 : 20, groups = {};
-  ALLKEYS.forEach(function(k){groups[k]=shuffle(pool.filter(function(i){return i[1]===k}))});
-  var out = [];
-  while(out.length<n){
-    var added = false;
-    ALLKEYS.forEach(function(k){ if(out.length<n && groups[k].length){out.push(groups[k].shift());added=true} });
-    if(!added) break;
-  }
+function buildRound(){
+  /* 10 random items: one from every bin, then 5 more picked at random, all shuffled */
+  var pool = shuffle(ITEMS), out = [], used = {};
+  ALLKEYS.forEach(function(k){
+    for(var i=0;i<pool.length;i++){ if(pool[i][1]===k && !used[i]){ out.push(pool[i]); used[i]=1; break; } }
+  });
+  for(var j=0;j<pool.length && out.length<10;j++){ if(!used[j]){ out.push(pool[j]); used[j]=1; } }
   return shuffle(out);
 }
 
 /* ---------- storage (optional, per device) ---------- */
-function loadBest(){try{return JSON.parse(localStorage.getItem("fbc-best-v1")||"[]")}catch(e){return []}}
+function loadBest(){try{return JSON.parse(localStorage.getItem("fbc-best-v2")||"[]")}catch(e){return []}}
 function saveBest(e){try{var a=loadBest();a.push(e);a.sort(function(x,y){return x.t-y.t});
-  var kept=[],c={kids:0,all:0};a.forEach(function(r){if(c[r.m]<5){c[r.m]++;kept.push(r)}});
-  localStorage.setItem("fbc-best-v1",JSON.stringify(kept))}catch(e){}}
+  var kept=a.slice(0,5);
+  localStorage.setItem("fbc-best-v2",JSON.stringify(kept))}catch(e){}}
 
 /* ---------- render ---------- */
 function setLangButtons(){
@@ -254,23 +251,21 @@ function renderStart(){
   var legend = ALLKEYS.map(function(k){var b=BINS[k];
     return '<div class="lg '+b.cls+'"><span class="dot"></span><div><b>'+L(b.en,b.hi)+' · '+L(b.ce,b.ch)+'</b><small>'+L(b.ee,b.eh)+'</small></div></div>'}).join("");
   var best = loadBest();
-  function tbl(m){var r=best.filter(function(x){return x.m===m});
+  function tbl(){var r=best;
     return r.length? '<table>'+r.map(function(x,i){return '<tr><td>'+(i+1)+'. '+esc(x.n)+'</td><td>'+x.t.toFixed(1)+' '+t("sec")+'</td></tr>'}).join("")+'</table>' : ''}
-  var bt = tbl("kids"), ba = tbl("all");
-  var bestHtml = (bt||ba) ? '<h2>'+t("best")+'</h2>'+(bt?'<b>'+t("kids")+'</b>'+bt:'')+(ba?'<b>'+t("all")+'</b>'+ba:'') : '';
+  var bt = tbl();
+  var bestHtml = bt ? '<h2>'+t("best")+'</h2>'+bt : '';
   $("#screen").innerHTML =
     '<h1>'+t("title")+'</h1><p class="sub">'+t("sub")+'</p>'+
     '<input type="text" id="nm" maxlength="20" placeholder="'+esc(t("name"))+'" value="'+esc(player)+'" aria-label="'+esc(t("name"))+'">'+
-    '<div class="modes">'+
-      '<button class="mode" data-m="kids"><div><b>'+t("kids")+'</b><span>'+t("kidsD")+'</span></div><i>🧒</i></button>'+
-      '<button class="mode" data-m="all"><div><b>'+t("all")+'</b><span>'+t("allD")+'</span></div><i>🧑‍🤝‍🧑</i></button>'+
+    '<div class="modes"><button class="mode" id="play"><div><b>'+t("play")+'</b><span>'+t("playD")+'</span></div><i>▶️</i></button>'+
     '</div><h2>'+t("legend")+'</h2><div class="legend">'+legend+'</div>'+bestHtml+
     '';
-  document.querySelectorAll(".mode").forEach(function(b){b.onclick=function(){player=($("#nm").value||"").trim();startGame(b.dataset.m)}});
+  $("#play").onclick=function(){player=($("#nm").value||"").trim();startGame()};
 }
 
-function startGame(m){
-  mode=m; round=buildRound(m); idx=0; wrong=0; elapsed=0; missed=[]; view="play"; phase="ask"; lastRes=null;
+function startGame(){
+  round=buildRound(); idx=0; wrong=0; elapsed=0; missed=[]; view="play"; phase="ask"; lastRes=null;
   startT=performance.now(); render();
 }
 
@@ -315,7 +310,7 @@ function next(){
 function finishGame(){
   var total = elapsed + wrong*5;
   lastRes = {total:total, acc: Math.round((round.length-wrong)/round.length*100), tip: TIPS[Math.floor(Math.random()*TIPS.length)]};
-  saveBest({n: player||t("anon"), m: mode, t: total});
+  saveBest({n: player||t("anon"), t: total});
   view="result"; render();
 }
 
@@ -331,7 +326,7 @@ function renderResult(){
     '<div class="tip"><b>👣 '+t("tip")+'</b><br>'+L(r.tip[0],r.tip[1])+'</div>'+miss+
     '<div class="row"><button class="go" id="again">'+t("again")+'</button><button class="ghost" id="home">'+t("home")+'</button><button class="ghost" id="share">'+t("share")+'</button></div>'+
     '<p class="note" id="msg" aria-live="polite"></p>';
-  $("#again").onclick=function(){startGame(mode)};
+  $("#again").onclick=function(){startGame()};
   $("#home").onclick=function(){view="start";render()};
   $("#share").onclick=function(){
     var txt = "👣 "+t("title")+" · "+BRAND_NAME+": "+right+"/"+round.length+" "+t("correct")+", "+r.total.toFixed(1)+" "+t("sec")+"!";
